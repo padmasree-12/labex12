@@ -1,0 +1,143 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd"
+<html lang="en">
+<head>
+<title>AJAX 5 Star Rating</title>
+<script src="http://code.jquery.com/jquery-latest.js">
+</script>
+//This is the first thing we add $(document).ready(function() {
+$('.rate_widget').each(function(i) {
+var widget = this; var out_data={
+widget id: $(widget).attr("id"), fetch: 1
+$.post(
+'ratings.php',
+out_data,
+function(INFO) {
+$(widget).data( 'fsr', INFO); set votes(widget);
+'json'
+$C.ratings stars').hover( Handles the mouseover
+function(){
+$(this).prevAll().andSelf().addClass('ratings_over'); $(this).nextAllO.removeClass('ratings_vote");
+// Handles the mouseout function() {
+$(this).prevAll().andSelf).removeClass('ratings_over'); // can't use 'this' because it wont contain the updated data
+set votes($(this).parent());
+):
+//This actually records the vote
+$('.ratings stars").bind('click', function() {
+var star = this; var widget $(this).parent();
+var clicked_data={ clicked on: $(star).attr('class'), widget_id: S(star).parent().attr("id")
+$.post( Seatings ahn)
+//This actually records the vote
+$('.ratings_stars").bind('click', function() {
+var star = this;
+var widget $(this).parent(); var clicked_data={
+clicked on: S(star).attr("class"),
+widget id: $(star).parent().attr("id")
+$.post(
+'ratings.php',
+clicked_data,
+function(INFO) {
+widget.data( 'fsr', INFO);
+set votes(widget):
+'json'
+):
+function set_votes(widget) {
+var avg = $(widget).data('fsr).whole_avg: var votes = $(widget).data('fsr).number_votes,
+var exact = $(widget).data('fsr').dec_avg:
+window.console && console.log(and now in set votes, it thinks the fst is '+
+S(widget).data('fsr').number_votes);
+S(widget).find('.star+ avg).prevAll().andSelf).addClass('ratings_vote);
+$(widget).find('.star+ avg).nextAll().removeClass('ratings_vote');
+$(widget).find('.total votes).text( votes+votes recorded (+ exact +'rating)'
+}
+//END FIRST THING
+</script> <style>
+rate_widget {
+border: 1px solid #CCC;
+overflow: visible;
+padding: 10px;
+position: relative;
+width: 180px;
+height: 32px;
+ratings stars {
+background: url('star_empty.png) no-repeat;
+float: left;
+height: 28px; padding: 2px;
+width: 32px;
+}
+ratings_vote { background: url('star_full.png') no-repeat;
+ratings_over {
+background: url('star_highlight.png) no-repeat;
+total votes
+background: #eaeaea;
+top: 58px:
+left: 0;
+padding: 5px;
+position: absolute;
+font: 10px verdana, sans-serif;
+margin: 0 auto 40px auto; width: 180px;
+}
+text-align: center;
+width: 400px;
+margin: 20px auto;
+</style>
+</head>
+<body>
+<h1>Rate the following movies! </h1> <div class='movie_choice">
+Rate: Raiders of the Lost Ark
+<div id="rl" class="rate_widget">
+<div class="star 1 ratings stars"></div>
+<div class="star 2 ratings_stars"></div>
+<div class="star_3 ratings_stars"></div>
+<div class="star 4 ratings stars"></div>
+<div class="star 5 ratings_stars"></div>
+<div class="total_votes">vote data</div>
+</div> </div>
+<div class='movie_choice">
+Rate: The Hunt for Red October <div id="12" class="rate_widget">
+<div class="star_1 ratings_stars"></div>
+<div class="star 2 ratings stars"></div>
+<div class="star 3 ratings_stars"></div>
+<div class="star 4 ratings stars"></div>
+<div class="star 5 ratings_stars"></div>
+<div class="total_votes">vote data</div>
+</div> </div>
+</body>
+</html>
+Ratings.php
+<?php
+Srating = new ratings($_POST['widget_id']); isset($_POST['fetch']) ? Srating->get ratings(): Srating->vote();
+class ratings {
+var $data_file = '/ratings.data.txt';
+private Swidget_id; private $data = array():
+function construct(Swid) {
+$this->widget_id = Swid;
+Sall-file_get_contents($this->data_file);
+if($all) {
+$this->data = unserialize($all):
+public function get_ratings() {
+if($this->data[$this->widget_id]) {
+echo ison encode($this->datal $this->widget id):
+else (
+$data['widget_id'] Sthis->widget id, $data['number_votes']=0:
+$data['total_points"] = 0; $data['dec_avg']=0;
+$data['whole_avg'] = 0; echo json_encode($data);
+public function vote() {
+#Get the value of the vote
+preg_match('/star ([1-5]{1})", $_POST['clicked on'], Smatch); Svote Smatch[1];
+SID=$this.widget_id
+#Update the record if it exists
+if($this->data[SID]) {
+$this->data[SID]['number_votes'] += 1;
+$this->data[SID]['total_points'] += Svote;
+#Create a new one if it doesn't
+else (
+$this->data[SID]['number_votes'] = 1;
+$this->data[SID]['total points'] = $vote;
+$this->data[SID]['dec_avg'] = round($this->data[SID]['total points']/$this >data[SID]['number_votes], 1); |
+$this->data[SID]['whole_avg'] = round( $this->data[$ID]['dec_avg']);
+file_put_contents($this->data file, serialize($this->data));
+$this->get ratings():
+#end class
+]
